@@ -3,41 +3,33 @@ import os
 
 def create_collage():
     try:
-        #  Input Parsing
         print("Please provide the paths to the four images:")
         paths = [input(f"Path for Image {i + 1}: ") for i in range(4)]
         for path in paths:
             if not os.path.exists(path):
                 raise FileNotFoundError(f"File not found: {path}")
 
-        #  Image Loading
         images = []
         for path in paths:
             try:
                 img = Image.open(path)
-                img.verify()  # Check if the image is corrupted
+                img.verify()  
                 images.append(Image.open(path))  # Reload to avoid closed file issue
             except Exception as e:
                 raise ValueError(f"Error loading image {path}: {e}")
 
-        #  Resizing Images
-        # Resize all images to the size of the smallest one
         min_width = min(img.width for img in images)
         min_height = min(img.height for img in images)
         resized_images = [img.resize((min_width, min_height)) for img in images]
 
-        # Collage Creation
         collage_width = min_width * 2
         collage_height = min_height * 2
         collage = Image.new("RGB", (collage_width, collage_height))
 
-        # Place the images in a 2x2 grid
-        collage.paste(resized_images[0], (0, 0))  # Top-left
-        collage.paste(resized_images[1], (min_width, 0))  # Top-right
-        collage.paste(resized_images[2], (0, min_height))  # Bottom-left
-        collage.paste(resized_images[3], (min_width, min_height))  # Bottom-right
-
-        #  Save the Collage
+        collage.paste(resized_images[0], (0, 0))  
+        collage.paste(resized_images[1], (min_width, 0))  
+        collage.paste(resized_images[2], (0, min_height)) 
+        collage.paste(resized_images[3], (min_width, min_height))  
         output_format = input("Specify the output file format (jpg, png, tiff): ").lower()
         if output_format not in ["jpg", "png", "tiff"]:
             raise ValueError("Unsupported output format.")
@@ -48,6 +40,4 @@ def create_collage():
 
     except Exception as e:
         print(f"Error: {e}")
-
-# Run the program
 create_collage()
