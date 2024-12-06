@@ -3,14 +3,14 @@ import os
 
 def create_collage():
     try:
-        # Step 1: Input Parsing
+        #  Input Parsing
         print("Please provide the paths to the four images:")
         paths = [input(f"Path for Image {i + 1}: ") for i in range(4)]
         for path in paths:
             if not os.path.exists(path):
                 raise FileNotFoundError(f"File not found: {path}")
 
-        # Step 2: Image Loading
+        #  Image Loading
         images = []
         for path in paths:
             try:
@@ -20,13 +20,13 @@ def create_collage():
             except Exception as e:
                 raise ValueError(f"Error loading image {path}: {e}")
 
-        # Step 3: Resizing Images
+        #  Resizing Images
         # Resize all images to the size of the smallest one
         min_width = min(img.width for img in images)
         min_height = min(img.height for img in images)
         resized_images = [img.resize((min_width, min_height)) for img in images]
 
-        # Step 4: Collage Creation
+        # Collage Creation
         collage_width = min_width * 2
         collage_height = min_height * 2
         collage = Image.new("RGB", (collage_width, collage_height))
@@ -37,7 +37,7 @@ def create_collage():
         collage.paste(resized_images[2], (0, min_height))  # Bottom-left
         collage.paste(resized_images[3], (min_width, min_height))  # Bottom-right
 
-        # Step 5: Save the Collage
+        #  Save the Collage
         output_format = input("Specify the output file format (jpg, png, tiff): ").lower()
         if output_format not in ["jpg", "png", "tiff"]:
             raise ValueError("Unsupported output format.")
